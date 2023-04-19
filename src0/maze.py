@@ -149,16 +149,20 @@ class Maze():
     def neighbors(self, state):
         row, col = state
         candidates = [
-            ("up", (row - 1, col)),
-            ("down", (row + 1, col)),
+            ("right", (row, col + 1)),
             ("left", (row, col - 1)),
-            ("right", (row, col + 1))
+            
+            ("down", (row + 1, col)),
+            ("up", (row - 1, col)),
+            
+            # ("right", (row, col + 1))
         ]
 
         result = []
         for action, (r, c) in candidates:
             if 0 <= r < self.height and 0 <= c < self.width and not self.walls[r][c]:
                 result.append((action, (r, c)))
+        print(result)
         return result
 
 
@@ -171,8 +175,8 @@ class Maze():
         # Initialize frontier to just the starting position
         start = Node(state=self.start, parent=None, action=None)
         # frontier = QueueFrontier()
-        frontier = StackFrontier()
-        # frontier = GreedyBestFirstFrontier()
+        # frontier = StackFrontier()
+        frontier = GreedyBestFirstFrontier()
         frontier.add(start)
 
         # Initialize an empty explored set
@@ -187,7 +191,7 @@ class Maze():
 
             # Choose a node from the frontier
             # ALGORITHM HERE
-            node = frontier.remove()
+            node = frontier.remove(self.goal)
             # node = frontier.remove(self.goal)
             self.num_explored += 1
 
